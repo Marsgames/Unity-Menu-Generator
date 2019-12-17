@@ -1,28 +1,74 @@
-﻿using System.Collections;
+﻿#region Author
+/////////////////////////////////////////
+//   Author : leomani3
+//   Source : https://github.com/leomani3/Unity-Menu-Generator
+/////////////////////////////////////////
+#endregion
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class MenuGenerator : MonoBehaviour
 {
+    #region Variables
     [Header("Prefabs :")]
-    public GameObject gameLogoPrefab;
-    public GameObject backgroundPrefab;
-    public GameObject buttonPrefab;
+    [SerializeField] private GameObject gameLogoPrefab = null;
+    [SerializeField] private GameObject backgroundPrefab = null;
+    [SerializeField] private GameObject buttonPrefab = null;
 
     [Header("Réglages :")]
-    public string[] buttonNames;
+    [SerializeField] private string[] buttonNames = null;
+
     [Header("")]
-    public float gameLogoMarginTop;
-    public float gameLogoMarginRight;
-    public float gameLogoSize;
+    [SerializeField] private float gameLogoMarginTop = 0;
+    [SerializeField] private float gameLogoMarginRight = 0;
+    [SerializeField] private float gameLogoSize = 0;
+
     [Header("")]
-    public float buttonMarginBottom;
-    public float buttonMarginRight;
-    public float spaceBewteenButtons;
-    public float buttonFontSize;
+    [SerializeField] private float buttonMarginBottom = 0;
+    [SerializeField] private float buttonMarginRight = 0;
+    [SerializeField] private float spaceBewteenButtons = 0;
+    [SerializeField] private float buttonFontSize = 0;
 
     private List<GameObject> buttons;
+    #endregion Variables
+
+    ///////////////////////////////////////////////////////////
+
+    #region Enums
+    #endregion Enums
+
+    ///////////////////////////////////////////////////////////
+
+    #region Unity's functions
+    // Start is called before the first frame update
+    private void Start()
+    {
+        CheckIfOk();
+
+    }
+    #endregion Unity's functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Functions
+    /// <summary>
+    /// Checks if all variables are set correctly, otherwise close Editor
+    /// </summary>
+    private void CheckIfOk()
+    {
+#if UNITY_EDITOR
+        bool isOk = true;
+
+        //if (!m_randomVariable)
+        //{
+        //    Debug.LogError("<b>Random Variable</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
+        //    isOk = false;
+        //}
+
+        UnityEditor.EditorApplication.isPlaying = isOk;
+#endif
+    }
 
     public void CreateMenu()
     {
@@ -39,7 +85,7 @@ public class MenuGenerator : MonoBehaviour
 
         //Game Logo
         GameObject gameLogo = Instantiate(gameLogoPrefab, new Vector3(0, 0, 0), Quaternion.identity, transform);
-        gameLogo.transform.position = new Vector3(GetComponent<RectTransform>().rect.width / 2 - gameLogoMarginRight, GetComponent<RectTransform>().rect.height - gameLogo.GetComponent<RectTransform>().rect.height/2 - gameLogoMarginTop, 0);
+        gameLogo.transform.position = new Vector3(GetComponent<RectTransform>().rect.width / 2 - gameLogoMarginRight, GetComponent<RectTransform>().rect.height - gameLogo.GetComponent<RectTransform>().rect.height / 2 - gameLogoMarginTop, 0);
         gameLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(gameLogoSize, gameLogoSize);
 
         //Boutons
@@ -52,7 +98,7 @@ public class MenuGenerator : MonoBehaviour
             buttons.Add(button);
         }
 
-        NormalizeButtonSize(); 
+        NormalizeButtonSize();
     }
 
     //change le text du bouton
@@ -114,5 +160,10 @@ public class MenuGenerator : MonoBehaviour
             }
         }
     }
+    #endregion Functions
 
+    ///////////////////////////////////////////////////////////
+
+    #region Accessors
+    #endregion Accessors
 }

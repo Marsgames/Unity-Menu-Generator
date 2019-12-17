@@ -18,7 +18,7 @@ public class ButtonEditor : Editor
 
         if (buttonManager.GetActionIndex() == 0)
         {
-            buttonManager.SetAction(ButtonManager.ACTIONS.LoadScene);
+            buttonManager.SetAction(ButtonManager.EAction.LoadScene);
 
             GUILayout.BeginHorizontal();
             if (!Application.isPlaying)
@@ -32,7 +32,7 @@ public class ButtonEditor : Editor
         }
         else if (buttonManager.GetActionIndex() == 1)
         {
-            buttonManager.SetAction(ButtonManager.ACTIONS.Quit);
+            buttonManager.SetAction(ButtonManager.EAction.Quit);
         }
 
     }
