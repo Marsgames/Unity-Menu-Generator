@@ -122,39 +122,46 @@ public class MenuGenerator : MonoBehaviour
     //change le text du bouton
     public void SetButtonText(GameObject button, string buttonText)
     {
-        Transform child;
-        for (int i = 0; i < button.transform.childCount; i++)
+        Transform child = button.transform.Find("BG");
+        TextMeshProUGUI text = button.GetComponentInChildren<TextMeshProUGUI>();
+        RectTransform rectTransform = text.GetComponent<RectTransform>();
+        if (text)
         {
-            if (button.transform.GetChild(i).GetComponent<TextMeshProUGUI>() != null)
-            {
-                child = button.transform.GetChild(i);
-                TextMeshProUGUI text = child.GetComponent<TextMeshProUGUI>();
-                text.fontSize = m_buttonFontSize;
+            text.fontSize = m_buttonFontSize;
+            text.SetText(buttonText);
 
-                text.SetText(buttonText); //set le texte
-                child.GetComponent<RectTransform>().sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, m_buttonFontSize); //adapte la boite pour être sur qu'elle soit plus grande que le texte
+            if (rectTransform)
+            {
+                rectTransform.sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, m_buttonFontSize);
             }
-
-            if (button.transform.GetChild(i).gameObject.name.Contains("BG"))
+            else
             {
-                child = button.transform.GetChild(i);
-                child.GetComponent<RectTransform>().sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, 2 * m_buttonFontSize);
+                Debug.LogWarning("Je me suis chié dans le getcomponent");
             }
         }
 
+
+        rectTransform = button.transform.Find("BG").GetComponent<RectTransform>();
+        if (rectTransform)
+        {
+            rectTransform.sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, 2 * m_buttonFontSize);
+        }
     }
 
     //Change la size de tous les boutons pour être de la même largeur que le plus grand bouton
     public void NormalizeButtonSize()
     {
         float maxWidth = 0;
+        Transform child;
+        RectTransform rectTransform;
+
         foreach (GameObject button in m_buttons)
         {
-            Transform child = button.transform.Find("BG");
+            child = button.transform.Find("BG");
 
             if (child)
             {
-                RectTransform rectTransform = child.GetComponent<RectTransform>();
+                rectTransform = child.GetComponent<RectTransform>();
 
                 if (rectTransform.sizeDelta.x > maxWidth)
                 {
@@ -164,37 +171,6 @@ public class MenuGenerator : MonoBehaviour
                 rectTransform.sizeDelta = new Vector2(maxWidth, rectTransform.sizeDelta.y);
             }
         }
-
-        ////Normalisation de la largeur des boutons selon le plus large.
-        //float maxWidth = 0;
-        //for (int i = 0; i < m_buttons.Count; i++)
-        //{
-        //    Transform child;
-        //    for (int j = 0; j < m_buttons[i].transform.childCount; j++)
-        //    {
-        //        if (m_buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
-        //        {
-        //            child = m_buttons[i].transform.GetChild(j);
-        //            if (child.GetComponent<RectTransform>().sizeDelta.x > maxWidth)
-        //            {
-        //                maxWidth = child.GetComponent<RectTransform>().sizeDelta.x;
-        //            }
-        //        }
-        //    }
-        //}
-
-        //for (int i = 0; i < m_buttons.Count; i++)
-        //{
-        //    Transform child;
-        //    for (int j = 0; j < m_buttons[i].transform.childCount; j++)
-        //    {
-        //        if (m_buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
-        //        {
-        //            child = m_buttons[i].transform.GetChild(j);
-        //            child.GetComponent<RectTransform>().sizeDelta = new Vector2(maxWidth, child.GetComponent<RectTransform>().sizeDelta.y);
-        //        }
-        //    }
-        //}
     }
     #endregion Functions
 
