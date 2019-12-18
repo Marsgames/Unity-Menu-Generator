@@ -58,8 +58,15 @@ public class MenuGenerator : MonoBehaviour
     //change le text du bouton
     public void SetButtonText(GameObject button, string buttonText)
     {
+<<<<<<< Updated upstream
         Transform child;
         for (int i = 0; i < button.transform.childCount; i++)
+=======
+        Transform child = button.transform.Find("ButtonBG");
+        TextMeshProUGUI text = button.GetComponentInChildren<TextMeshProUGUI>();
+        RectTransform rectTransform = text.GetComponent<RectTransform>();
+        if (text)
+>>>>>>> Stashed changes
         {
             if (button.transform.GetChild(i).GetComponent<TextMeshProUGUI>() != null)
             {
@@ -78,6 +85,15 @@ public class MenuGenerator : MonoBehaviour
             }
         }
 
+<<<<<<< Updated upstream
+=======
+
+        rectTransform = button.transform.Find("ButtonBG").GetComponent<RectTransform>();
+        if (rectTransform)
+        {
+            rectTransform.sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, 2 * m_buttonFontSize);
+        }
+>>>>>>> Stashed changes
     }
 
     //Change la size de tous les boutons pour être de la même largeur que le plus grand bouton
@@ -87,8 +103,14 @@ public class MenuGenerator : MonoBehaviour
         float maxWidth = 0;
         for (int i = 0; i < buttons.Count; i++)
         {
+<<<<<<< Updated upstream
             Transform child;
             for (int j = 0; j < buttons[i].transform.childCount; j++)
+=======
+            child = button.transform.Find("ButtonBG");
+
+            if (child)
+>>>>>>> Stashed changes
             {
                 if (buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
                 {
@@ -103,8 +125,14 @@ public class MenuGenerator : MonoBehaviour
 
         for (int i = 0; i < buttons.Count; i++)
         {
+<<<<<<< Updated upstream
             Transform child;
             for (int j = 0; j < buttons[i].transform.childCount; j++)
+=======
+            child = button.transform.Find("ButtonBG");
+
+            if (child)
+>>>>>>> Stashed changes
             {
                 if (buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
                 {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ButtonManager : MonoBehaviour
 {
+<<<<<<< Updated upstream
     public enum ACTIONS { LoadScene, Quit};
 
     [HideInInspector]
@@ -12,6 +13,16 @@ public class ButtonManager : MonoBehaviour
     private ACTIONS action;
     [HideInInspector]
     public int actionIndex;
+=======
+    #region Variables
+    private string sceneName;
+    private GameObject m_objectToToggle;
+
+    private int m_buttonIndex;
+    private EAction m_action = (EAction)2;
+    private int m_actionIndex;
+    #endregion Variables
+>>>>>>> Stashed changes
 
     private void Start()
     {
@@ -38,7 +49,14 @@ public class ButtonManager : MonoBehaviour
         sceneName = str;
     }
 
+<<<<<<< Updated upstream
     public ACTIONS GetAction()
+=======
+        m_objectToToggle = objectToToggle;
+    }
+
+    public EAction GetAction()
+>>>>>>> Stashed changes
     {
         return action;
     }
@@ -55,6 +73,10 @@ public class ButtonManager : MonoBehaviour
 
     public void SetActionIndex(int i)
     {
+<<<<<<< Updated upstream
         actionIndex = i;
+=======
+        m_actionIndex = i;
+>>>>>>> Stashed changes
     }
 }
