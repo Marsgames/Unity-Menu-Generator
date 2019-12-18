@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7916655377812927585}
   - component: {fileID: 4115908459101498305}
   - component: {fileID: 9204346984153444031}
+  - component: {fileID: 6514587054944018545}
   m_Layer: 5
   m_Name: CanvasMenuGenerator
   m_TagString: Untagged
@@ -72,13 +73,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7916655377812927644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1980459831, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 654, y: 1036}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -94,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7916655377812927644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_IgnoreReversedGraphics: 1
@@ -114,20 +115,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09bde6c9a671e8d4c92b8930ab2338ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameLogoPrefab: {fileID: 3607854489756595370, guid: 38c821aaccaf75b4096b3c5159949ca1,
-    type: 3}
-  backgroundPrefab: {fileID: 7253063443972919496, guid: 8643cfd5ce7103b49a6ff834d0f8f93e,
-    type: 3}
-  buttonPrefab: {fileID: 2452021666131111847, guid: a19526caa715218448f6f9adf8ce8402,
-    type: 3}
-  buttonNames:
-  - PLAY
-  - QUIT
-  gameLogoMarginTop: 150
-  gameLogoSize: 200
-  buttonsOffset: 100
-  spaceBewteenButtons: 100
-  buttonFontSize: 36
+  m_buttonAspect: {fileID: 11400000, guid: 19c931c7ad7f64ae88158036dd1fd4e4, type: 2}
+  m_backgroundAspect: {fileID: 11400000, guid: 44b37f26db19c4342aeb7ac8ebc35ba3, type: 2}
+  m_buttonNames: []
+  m_spaceBewteenButtons: 0
+  m_buttonFontSize: 36
 --- !u!114 &7916655377812927585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,9 +238,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 7916655377812927644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
+--- !u!114 &6514587054944018545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7916655377812927644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
