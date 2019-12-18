@@ -1,40 +1,161 @@
-﻿using System.Collections.Generic;
+﻿#region Author
+/////////////////////////////////////////
+//   Author : leomani3
+//   Source : https://github.com/leomani3/Unity-Menu-Generator
+/////////////////////////////////////////
+#endregion
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(AudioSource))]
 public class MenuManager : MonoBehaviour
 {
-    public AudioClip selectSound;
+    #region Variables
+    [SerializeField] private AudioClip m_selectSound = null;
 
-    private List<GameObject> buttons;
-    private int currentIndex;
-    private int maxIndex;
-    private AudioSource audioSource;
+    private List<GameObject> m_buttons = new List<GameObject>();
+    private int m_currentIndex;
+    private int m_maxIndex;
+    private AudioSource m_audioSource;
+    private Camera m_camera;
 
+    private int m_lastAction = 0; // Use to allow selection by keyboard AND unselect when mouse is out of button
+    #endregion Variables
+
+    ///////////////////////////////////////////////////////////
+
+    #region Unity's functions
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        CheckIfOk();
+
+        m_audioSource = GetComponent<AudioSource>();
+        m_camera = Camera.main;
 
 
-        buttons = new List<GameObject>();
-        for (int i = 0; i < transform.childCount; i++)
+        foreach (Transform child in transform)
         {
-            if (transform.GetChild(i).name.Contains("Button"))
+            if (child.name.Contains("Button"))
             {
-                buttons.Add(transform.GetChild(i).gameObject);
+                m_buttons.Add(child.gameObject);
             }
         }
 
-        currentIndex = 0;
-        maxIndex = buttons.Count - 1;
+        m_currentIndex = -1;
+        m_maxIndex = m_buttons.Count - 1;
 
-        buttons[currentIndex].GetComponent<Animator>().SetBool("selected", true);   
+        //m_buttons[m_currentIndex].GetComponent<Animator>().SetBool("selected", true);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        MoveInMenu();
+
+        ButtonAction();
+
+        if (CheckMouseHoverButtons())
+        {
+            SetSelected(m_currentIndex);
+        }
+    }
+    #endregion Unity's functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Functions
+    /// <summary>
+    /// Checks if all variables are set correctly, otherwise close Editor
+    /// </summary>
+    private void CheckIfOk()
+    {
+#if UNITY_EDITOR
+        bool isOk = true;
+
+        //if (!m_randomVariable)
+        //{
+        //    Debug.LogError("<b>Random Variable</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
+        //    isOk = false;
+        //}
+
+        UnityEditor.EditorApplication.isPlaying = isOk;
+#endif
+    }
+
+    private void MoveInMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            m_currentIndex--;
+            if (m_currentIndex < 0)
+            {
+                m_currentIndex = m_maxIndex;
+            }
+
+            SetSelected(m_currentIndex);
+            m_lastAction = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            m_currentIndex++;
+            if (m_currentIndex > m_maxIndex)
+            {
+                m_currentIndex = 0;
+            }
+
+            SetSelected(m_currentIndex);
+            m_lastAction = 0;
+        }
+    }
+
+    private void ButtonAction()
+    {
+        if (Input.GetKeyDown(KeyCode.Return) || (Input.GetMouseButtonDown(0) && 1 == m_lastAction))
+        {
+            ButtonManager btn = m_buttons[m_currentIndex].GetComponent<ButtonManager>();
+
+            if (!btn)
+            {
+                return;
+            }
+
+            switch (btn.GetAction())
+            {
+                case ButtonManager.EAction.LoadScene:
+                    Debug.Log("load scene");
+
+                    SceneManager.LoadScene(btn.GetSceneName());
+                    break;
+
+                case ButtonManager.EAction.ToggleObject:
+                    Debug.Log("toggle object");
+
+                    GameObject go = btn.GetObjectToToggle();
+                    if (go)
+                    {
+                        go.SetActive(!go.activeSelf);
+                    }
+                    break;
+
+                case ButtonManager.EAction.Quit:
+                    Debug.Log("quit");
+
+                    Application.Quit();
+
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#endif
+                    break;
+            }
+        }
     }
 
     //regarde si la souris est sur un bouton. Si oui elle renvoie true et change l'index.
-    public bool CheckMouseHoverButtons()
+    private bool CheckMouseHoverButtons()
     {
         PointerEventData pointerEventData = new PointerEventData(EventSystem.current);
         pointerEventData.position = Input.mousePosition;
@@ -42,87 +163,92 @@ public class MenuManager : MonoBehaviour
         List<RaycastResult> raycastResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
 
-        for (int i = 0; i < raycastResults.Count; i++)
+        ButtonManager button;
+        foreach (RaycastResult raycast in raycastResults)
         {
-            ButtonManager button = raycastResults[i].gameObject.transform.parent.GetComponent<ButtonManager>();
-            if (button != null && button.GetButtonIndex() != currentIndex)
+            if (!raycast.gameObject.name.Contains("Button"))
             {
-                currentIndex = button.GetButtonIndex();
+                continue;
+            }
+
+            //Debug.Log("Gameobject : " + raycast.gameObject.name, raycast.gameObject);
+            button = raycast.gameObject.transform.parent.GetComponent<ButtonManager>();
+
+            if (button && button.GetButtonIndex() != m_currentIndex)
+            {
+                m_lastAction = 1;
+                //Debug.Log("button index : " + button.GetButtonIndex());
+
+                m_currentIndex = button.GetButtonIndex();
+                //SetSelected(m_currentIndex);
                 return true;
             }
+            else if (button)
+            {
+                return false;
+            }
+        }
+
+        if (1 == m_lastAction)
+        {
+            m_currentIndex = -1;
+            UnselectAll();
         }
         return false;
     }
 
-    public void SetSelected(int index)
-    {
-        PlaySound(selectSound);
 
-        for (int i = 0; i < buttons.Count; i++)
+    private void SetSelected(int index)
+    {
+        PlaySound(m_selectSound);
+
+        Animator animator;
+        foreach (GameObject button in m_buttons)
         {
-            if (i == index)
+            animator = button.GetComponent<Animator>();
+
+            if (animator)
             {
-                buttons[i].GetComponent<Animator>().SetBool("selected", true);
+                animator.SetBool("selected", false);
             }
-            else
+        }
+
+        if (index > m_buttons.Count - 1 || index < 0)
+        {
+            return;
+        }
+
+        animator = m_buttons[index].GetComponent<Animator>();
+
+        if (animator)
+        {
+            animator.SetBool("selected", true);
+        }
+    }
+
+    private void UnselectAll()
+    {
+        Animator animator;
+        foreach (GameObject button in m_buttons)
+        {
+            animator = button.GetComponent<Animator>();
+
+            if (animator)
             {
-                buttons[i].GetComponent<Animator>().SetBool("selected", false);
+                animator.SetBool("selected", false);
             }
         }
     }
 
-    public void PlaySound(AudioClip sound)
+    private void PlaySound(AudioClip sound)
     {
-        audioSource.clip = sound;
-        audioSource.Play();
+        m_audioSource.clip = sound;
+        m_audioSource.Play();
     }
+    #endregion Functions
 
-    // Update is called once per frame
-    void Update()
-     {
+    ///////////////////////////////////////////////////////////
 
-         if (Input.GetKeyDown(KeyCode.S)) //BAS
-         {
-             //incrémentation
-             currentIndex++;
-             if (currentIndex > maxIndex)
-             {
-                 currentIndex = 0;
-             }
-
-            SetSelected(currentIndex);
-         }
-         if(Input.GetKeyDown(KeyCode.Z))//HAUT
-         {
-             //décrémentation
-             currentIndex--;
-             if (currentIndex < 0)
-             {
-                 currentIndex = maxIndex;
-             }
-
-            SetSelected(currentIndex);
-         }
-
-         if (Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
-         {
-            ButtonManager btn = buttons[currentIndex].GetComponent<ButtonManager>();
-            if (btn.GetAction() == ButtonManager.ACTIONS.LoadScene)
-            {
-                Debug.Log("load scene");
-                SceneManager.LoadScene(btn.GetSceneName());
-            }
-            else if (btn.GetAction() == ButtonManager.ACTIONS.Quit)
-            {
-                Application.Quit();
-                Debug.Log("quit");
-            }
-         }
-
-        if (CheckMouseHoverButtons())
-        {
-            SetSelected(currentIndex);
-        }
-     }
-
+    #region Accessors
+    #endregion Accessors
 }

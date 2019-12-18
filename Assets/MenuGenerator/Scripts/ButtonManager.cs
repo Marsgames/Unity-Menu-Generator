@@ -1,60 +1,93 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#region Author
+/////////////////////////////////////////
+//   Author : leomani3
+//   Source : https://github.com/leomani3/Unity-Menu-Generator
+/////////////////////////////////////////
+#endregion
 using UnityEngine;
 
 public class ButtonManager : MonoBehaviour
 {
-    public enum ACTIONS { LoadScene, Quit};
+    #region Variables
+    private string sceneName;
+    [SerializeField] private GameObject m_objectToToggle;
 
-    [HideInInspector]
-    public int buttonIndex;
-    public string sceneName;
-    private ACTIONS action;
-    [HideInInspector]
-    public int actionIndex;
+    [SerializeField] private int m_buttonIndex;
+    private EAction m_action = (EAction)2;
+    [SerializeField] private int m_actionIndex;
+    #endregion Variables
 
-    private void Start()
-    {
-        action = ACTIONS.Quit;
-    }
+    ///////////////////////////////////////////////////////////
 
+    #region Enums
+    public enum EAction { LoadScene, ToggleObject, Quit };
+    #endregion Enums
+
+    ///////////////////////////////////////////////////////////
+
+    #region Unity's functions
+    #endregion Unity's functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Functions
+    #endregion Functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Accessors
     public int GetButtonIndex()
     {
-        return buttonIndex;
+        return m_buttonIndex;
     }
-
     public void SetButtonIndex(int index)
     {
-        buttonIndex = index;
+        m_buttonIndex = index;
     }
 
     public string GetSceneName()
     {
         return sceneName;
     }
-
-    public void SetSceneName(string str)
+    public void SetSceneName(string name)
     {
-        sceneName = str;
+        sceneName = name;
     }
 
-    public ACTIONS GetAction()
+    public GameObject GetObjectToToggle()
     {
-        return action;
+        return m_objectToToggle;
+    }
+    public void SetObjectToToggle(GameObject objectToToggle)
+    {
+        if (!objectToToggle)
+        {
+            return;
+        }
+
+        m_objectToToggle = objectToToggle;
+
+        Debug.Log("ObjectToToggle : " + objectToToggle.name);
     }
 
-    public void SetAction(ACTIONS act)
+    public EAction GetAction()
     {
-        action = act;
+        return m_action;
+    }
+    public void SetAction(EAction action)
+    {
+        m_action = action;
     }
 
     public int GetActionIndex()
     {
-        return actionIndex;
+        return m_actionIndex;
     }
-
     public void SetActionIndex(int i)
     {
-        actionIndex = i;
+        m_actionIndex = i;
+
+        Debug.Log("Mon nouvel action index est : " + i);
     }
+    #endregion Accessors
 }
