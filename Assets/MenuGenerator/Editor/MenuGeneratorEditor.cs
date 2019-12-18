@@ -2,6 +2,7 @@
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 [CustomEditor(typeof(MenuGenerator))]
 public class MenuGeneratorEditor : Editor
@@ -27,6 +28,28 @@ public class MenuGeneratorEditor : Editor
             foreach (Transform child in childs)
             {
                 DestroyImmediate(child.gameObject);
+            }
+        }
+
+        //HideBGVariables();
+    }
+
+    // TODO: faire marcher ça
+    private void HideBGVariables()
+    {
+        MenuGenerator mg = target as MenuGenerator;
+
+        mg.SetUseBgImage(EditorGUILayout.Toggle("Use Bg Image", mg.GetUseBgImage()));
+        //Debug.Log("m_useBgImage value : " + mg.GetUseBgImage());
+
+        using (var group = new EditorGUILayout.FadeGroupScope(Convert.ToSingle(mg.GetUseBgImage())))
+        {
+            if (group.visible == false)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PrefixLabel("Number");
+                mg.SetBackgroundPadding(EditorGUILayout.IntSlider(mg.GetBackgroundPadding(), 0, 500));
+                EditorGUI.indentLevel--;
             }
         }
     }

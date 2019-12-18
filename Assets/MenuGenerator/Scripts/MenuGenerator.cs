@@ -9,15 +9,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
-using UnityEditor;
 
 public class MenuGenerator : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private bool m_useBackgroundImage = false;
+    [Header("Background Image")]
+    [SerializeField] private bool m_useBgImage = false;
+    [SerializeField, Tooltip("This one can be empty"), ConditionalField(nameof(m_useBgImage))] private BackgroundGenerator m_backgroundAspect = null;
+    [SerializeField, Range(0, 500), Tooltip("Change this value after generating menu")] private int m_backgroundPadding = 0;
 
+    [Header("Buttons")]
     [SerializeField, Tooltip("This one can be empty")] private ButtonGenerator m_buttonAspect = null;
-    [SerializeField, Tooltip("This one can be empty")] public Object m_backgroundAspect = null;
+    [SerializeField] private string[] m_buttonNames = null;
+    [SerializeField] private float m_buttonFontSize = 36;
+    [SerializeField, Range(-500, 500), Tooltip("Change this value after creating buttons menu")] private int m_spaceBewteenButtons = 0;
+
 
     private GameObject m_buttonPrefab;
     private GameObject m_backgroundPrefab;
@@ -25,14 +31,6 @@ public class MenuGenerator : MonoBehaviour
     private VerticalLayoutGroup m_vLayout;
     private CanvasScaler m_cScaler;
     private GameObject m_background;
-
-    [Header("Réglages :")]
-    [SerializeField] private string[] m_buttonNames = null;
-
-    [Space]
-    [SerializeField, Range(-500, 500), Tooltip("Change this value after creating buttons menu")] private int m_spaceBewteenButtons = 0;
-    [SerializeField, Range(0, 500), Tooltip("Change this value after generating menu")] private int m_backgroundPadding = 0;
-    [SerializeField] private float m_buttonFontSize = 36;
 
     private List<GameObject> m_buttons;
     #endregion Variables
@@ -46,7 +44,6 @@ public class MenuGenerator : MonoBehaviour
         if (m_vLayout)// && transform.childCount > 0)
         {
             m_vLayout.spacing = m_spaceBewteenButtons;
-            //m_vLayout.padding = new RectOffset(0, 0, 0, m_spaceBewteenButtons);
         }
         else
         {
@@ -107,7 +104,7 @@ public class MenuGenerator : MonoBehaviour
         }
 
         //Background Image
-        m_background = Instantiate(m_backgroundPrefab, transform);
+        CheckBackground();
 
         //Boutons
         int index = 0;
@@ -210,52 +207,61 @@ public class MenuGenerator : MonoBehaviour
 
         if (m_backgroundAspect)
         {
-            BackgroundGenerator bgAspect = m_backgroundAspect as BackgroundGenerator;
             Image backgroundImage = m_backgroundPrefab.GetComponentInChildren<Image>();
-            backgroundImage.sprite = bgAspect.GetImage();
-            backgroundImage.color = bgAspect.GetColor();
+            backgroundImage.sprite = m_backgroundAspect.GetImage();
+            backgroundImage.color = m_backgroundAspect.GetColor();
         }
 
         Vector2 screeSize = new Vector2(Screen.width, Screen.height);
         RectTransform rect = m_backgroundPrefab.GetComponent<RectTransform>();
         rect.sizeDelta = screeSize;
         rect.offsetMin = new Vector2(m_backgroundPadding, m_backgroundPadding);
-        rect.offsetMax = new Vector2(m_backgroundPadding, m_backgroundPadding);
+        rect.offsetMax = new Vector2(-m_backgroundPadding, -m_backgroundPadding);
+    }
+
+    private void CheckBackground(bool fromOnValidate = false)
+    {
+        if (m_useBgImage)
+        {
+            if (m_background)
+            {
+                return;
+            }
+
+            GenerateBackgroundPrefab();
+            m_background = Instantiate(m_backgroundPrefab, transform);
+        }
+        else
+        {
+            if (!m_background)
+            {
+                return;
+            }
+
+            DestroyImmediate(m_background);
+        }
     }
     #endregion Functions
 
     ///////////////////////////////////////////////////////////
 
     #region Accessors
-    public bool GetUseBackgroundImage()
+    public bool GetUseBgImage()
     {
-        return m_useBackgroundImage;
+        return m_useBgImage;
     }
-    public void SetUseBackgroundImage(bool value)
+    public void SetUseBgImage(bool value)
     {
-        m_useBackgroundImage = value;
+        m_useBgImage = value;
+    }
+
+    public int GetBackgroundPadding()
+    {
+        return m_backgroundPadding;
+    }
+    public void SetBackgroundPadding(int padding)
+    {
+        m_backgroundPadding = padding;
     }
     #endregion Accessors
-}
-
-[CustomEditor(typeof(MenuGenerator))]
-public class MenuGeneratorEditor : Editor
-{
-    override public void OnInspectorGUI()
-    {
-        MenuGenerator mg = target as MenuGenerator;
-
-        mg.SetUseBackgroundImage(GUILayout.Toggle(mg.GetUseBackgroundImage(), "UseBackgroundImage"));
-        //myScript.flag = GUILayout.Toggle(myScript.flag, "Flag");
-
-        if (mg.GetUseBackgroundImage())
-        {
-#pragma warning disable CS0618
-            mg.m_backgroundAspect = EditorGUILayout.ObjectField("Background Aspect", mg.m_backgroundAspect, null);
-        }
-
-        //if (myScript.flag)
-        //myScript.i = EditorGUILayout.IntSlider("I field:", myScript.i, 1, 100);
-
-    }
 }
