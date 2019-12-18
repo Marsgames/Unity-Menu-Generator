@@ -22,11 +22,6 @@ public class MenuManager : MonoBehaviour
 
     ///////////////////////////////////////////////////////////
 
-    #region Enums
-    #endregion Enums
-
-    ///////////////////////////////////////////////////////////
-
     #region Unity's functions
     // Start is called before the first frame update
     void Start()

@@ -7,36 +7,36 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuGenerator : MonoBehaviour
 {
     #region Variables
+    //[Header("GameArts")]
+    //[SerializeField] private Image m_gameLogo = null;
+
+
     [Header("Prefabs :")]
-    [SerializeField] private GameObject gameLogoPrefab = null;
-    [SerializeField] private GameObject backgroundPrefab = null;
-    [SerializeField] private GameObject buttonPrefab = null;
+    [SerializeField] private GameObject m_gameLogoPrefab = null;
+    [SerializeField] private GameObject m_backgroundPrefab = null;
+    [SerializeField] private GameObject m_buttonPrefab = null;
 
     [Header("Réglages :")]
-    [SerializeField] private string[] buttonNames = null;
+    [SerializeField] private string[] m_buttonNames = null;
 
     [Header("")]
-    [SerializeField] private float gameLogoMarginTop = 0;
-    [SerializeField] private float gameLogoMarginRight = 0;
-    [SerializeField] private float gameLogoSize = 0;
+    [SerializeField] private float m_gameLogoMarginTop = 0;
+    [SerializeField] private float m_gameLogoMarginRight = 0;
+    [SerializeField] private float m_gameLogoSize = 0;
 
     [Header("")]
-    [SerializeField] private float buttonMarginBottom = 0;
-    [SerializeField] private float buttonMarginRight = 0;
-    [SerializeField] private float spaceBewteenButtons = 0;
-    [SerializeField] private float buttonFontSize = 0;
+    [SerializeField] private float m_buttonMarginBottom = 0;
+    [SerializeField] private float m_buttonMarginRight = 0;
+    [SerializeField] private float m_spaceBewteenButtons = 0;
+    [SerializeField] private float m_buttonFontSize = 0;
 
-    private List<GameObject> buttons;
+    private List<GameObject> m_buttons;
     #endregion Variables
-
-    ///////////////////////////////////////////////////////////
-
-    #region Enums
-    #endregion Enums
 
     ///////////////////////////////////////////////////////////
 
@@ -55,24 +55,42 @@ public class MenuGenerator : MonoBehaviour
     /// <summary>
     /// Checks if all variables are set correctly, otherwise close Editor
     /// </summary>
-    private void CheckIfOk()
+    private bool CheckIfOk()
     {
-#if UNITY_EDITOR
         bool isOk = true;
 
-        //if (!m_randomVariable)
-        //{
-        //    Debug.LogError("<b>Random Variable</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
-        //    isOk = false;
-        //}
+#if UNITY_EDITOR
+        if (!m_gameLogoPrefab)
+        {
+            Debug.LogError("<b>Game Logo Prefab</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
+            isOk = false;
+        }
+        if (!m_backgroundPrefab)
+        {
+            Debug.LogError("<b>Background Prefab</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
+            isOk = false;
+        }
+        if (!m_buttonPrefab)
+        {
+            Debug.LogError("<b>Button Prefab</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
+            isOk = false;
+        }
+
 
         UnityEditor.EditorApplication.isPlaying = isOk;
 #endif
+
+        return isOk;
     }
 
     public void CreateMenu()
     {
-        buttons = new List<GameObject>();
+        if (!CheckIfOk())
+        {
+            return;
+        }
+
+        m_buttons = new List<GameObject>();
         //Clear du menu
         int nbChildren = transform.childCount;
         for (int i = 0; i < nbChildren; i++)
@@ -81,21 +99,21 @@ public class MenuGenerator : MonoBehaviour
         }
 
         //Background Image
-        Instantiate(backgroundPrefab, new Vector3(GetComponent<RectTransform>().rect.width / 2, GetComponent<RectTransform>().rect.height / 2, 0), Quaternion.identity, transform);
+        Instantiate(m_backgroundPrefab, new Vector3(GetComponent<RectTransform>().rect.width / 2, GetComponent<RectTransform>().rect.height / 2, 0), Quaternion.identity, transform);
 
         //Game Logo
-        GameObject gameLogo = Instantiate(gameLogoPrefab, new Vector3(0, 0, 0), Quaternion.identity, transform);
-        gameLogo.transform.position = new Vector3(GetComponent<RectTransform>().rect.width / 2 - gameLogoMarginRight, GetComponent<RectTransform>().rect.height - gameLogo.GetComponent<RectTransform>().rect.height / 2 - gameLogoMarginTop, 0);
-        gameLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(gameLogoSize, gameLogoSize);
+        GameObject gameLogo = Instantiate(m_gameLogoPrefab, new Vector3(0, 0, 0), Quaternion.identity, transform);
+        gameLogo.transform.position = new Vector3(GetComponent<RectTransform>().rect.width / 2 - m_gameLogoMarginRight, GetComponent<RectTransform>().rect.height - gameLogo.GetComponent<RectTransform>().rect.height / 2 - m_gameLogoMarginTop, 0);
+        gameLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(m_gameLogoSize, m_gameLogoSize);
 
         //Boutons
-        for (int i = 0; i < buttonNames.Length; i++)
+        for (int i = 0; i < m_buttonNames.Length; i++)
         {
-            GameObject button = Instantiate(buttonPrefab, new Vector3(GetComponent<RectTransform>().rect.width / 2 - buttonMarginRight, GetComponent<RectTransform>().rect.height / 2, 0), Quaternion.identity, transform);
-            SetButtonText(button, buttonNames[i]);
-            button.transform.position += new Vector3(0, buttonMarginBottom - (i * spaceBewteenButtons), 0);
+            GameObject button = Instantiate(m_buttonPrefab, new Vector3(GetComponent<RectTransform>().rect.width / 2 - m_buttonMarginRight, GetComponent<RectTransform>().rect.height / 2, 0), Quaternion.identity, transform);
+            SetButtonText(button, m_buttonNames[i]);
+            button.transform.position += new Vector3(0, m_buttonMarginBottom - (i * m_spaceBewteenButtons), 0);
             button.GetComponent<ButtonManager>().SetButtonIndex(i);
-            buttons.Add(button);
+            m_buttons.Add(button);
         }
 
         NormalizeButtonSize();
@@ -111,16 +129,16 @@ public class MenuGenerator : MonoBehaviour
             {
                 child = button.transform.GetChild(i);
                 TextMeshProUGUI text = child.GetComponent<TextMeshProUGUI>();
-                text.fontSize = buttonFontSize;
+                text.fontSize = m_buttonFontSize;
 
                 text.SetText(buttonText); //set le texte
-                child.GetComponent<RectTransform>().sizeDelta = new Vector2(buttonFontSize * buttonText.Length, buttonFontSize); //adapte la boite pour être sur qu'elle soit plus grande que le texte
+                child.GetComponent<RectTransform>().sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, m_buttonFontSize); //adapte la boite pour être sur qu'elle soit plus grande que le texte
             }
 
             if (button.transform.GetChild(i).gameObject.name.Contains("BG"))
             {
                 child = button.transform.GetChild(i);
-                child.GetComponent<RectTransform>().sizeDelta = new Vector2(buttonFontSize * buttonText.Length, 2 * buttonFontSize);
+                child.GetComponent<RectTransform>().sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, 2 * m_buttonFontSize);
             }
         }
 
@@ -129,36 +147,54 @@ public class MenuGenerator : MonoBehaviour
     //Change la size de tous les boutons pour être de la même largeur que le plus grand bouton
     public void NormalizeButtonSize()
     {
-        //Normalisation de la largeur des boutons selon le plus large.
         float maxWidth = 0;
-        for (int i = 0; i < buttons.Count; i++)
+        foreach (GameObject button in m_buttons)
         {
-            Transform child;
-            for (int j = 0; j < buttons[i].transform.childCount; j++)
+            Transform child = button.transform.Find("BG");
+
+            if (child)
             {
-                if (buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
+                RectTransform rectTransform = child.GetComponent<RectTransform>();
+
+                if (rectTransform.sizeDelta.x > maxWidth)
                 {
-                    child = buttons[i].transform.GetChild(j);
-                    if (child.GetComponent<RectTransform>().sizeDelta.x > maxWidth)
-                    {
-                        maxWidth = child.GetComponent<RectTransform>().sizeDelta.x;
-                    }
+                    maxWidth = rectTransform.sizeDelta.x;
                 }
+
+                rectTransform.sizeDelta = new Vector2(maxWidth, rectTransform.sizeDelta.y);
             }
         }
 
-        for (int i = 0; i < buttons.Count; i++)
-        {
-            Transform child;
-            for (int j = 0; j < buttons[i].transform.childCount; j++)
-            {
-                if (buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
-                {
-                    child = buttons[i].transform.GetChild(j);
-                    child.GetComponent<RectTransform>().sizeDelta = new Vector2(maxWidth, child.GetComponent<RectTransform>().sizeDelta.y);
-                }
-            }
-        }
+        ////Normalisation de la largeur des boutons selon le plus large.
+        //float maxWidth = 0;
+        //for (int i = 0; i < m_buttons.Count; i++)
+        //{
+        //    Transform child;
+        //    for (int j = 0; j < m_buttons[i].transform.childCount; j++)
+        //    {
+        //        if (m_buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
+        //        {
+        //            child = m_buttons[i].transform.GetChild(j);
+        //            if (child.GetComponent<RectTransform>().sizeDelta.x > maxWidth)
+        //            {
+        //                maxWidth = child.GetComponent<RectTransform>().sizeDelta.x;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //for (int i = 0; i < m_buttons.Count; i++)
+        //{
+        //    Transform child;
+        //    for (int j = 0; j < m_buttons[i].transform.childCount; j++)
+        //    {
+        //        if (m_buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
+        //        {
+        //            child = m_buttons[i].transform.GetChild(j);
+        //            child.GetComponent<RectTransform>().sizeDelta = new Vector2(maxWidth, child.GetComponent<RectTransform>().sizeDelta.y);
+        //        }
+        //    }
+        //}
     }
     #endregion Functions
 
