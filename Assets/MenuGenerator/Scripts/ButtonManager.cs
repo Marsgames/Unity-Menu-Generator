@@ -12,7 +12,7 @@ public class ButtonManager : MonoBehaviour
     private string sceneName;
     [SerializeField] private GameObject m_objectToToggle;
 
-    private int m_buttonIndex;
+    [SerializeField] private int m_buttonIndex;
     private EAction m_action = (EAction)2;
     [SerializeField] private int m_actionIndex;
     #endregion Variables

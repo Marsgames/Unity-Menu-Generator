@@ -9,22 +9,15 @@ public class ButtonEditor : Editor
     [SerializeField] private GameObject m_objectToToggle;
     [SerializeField] private string m_index;
 
-    //private Object obj;
-
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
 
         ButtonManager buttonManager = (ButtonManager)target;
-
         buttonManager.SetActionIndex(GUILayout.Toolbar(buttonManager.GetActionIndex(), new string[] { "Load Scene", "ToggleObject", "Quit" }));
 
-        //GUILayout.BeginHorizontal();
-        //GUILayout.Label("Index : ", GUILayout.Width(80));
-        //index = GUILayout.TextField(buttonManager.GetButtonIndex().ToString());
-
-        //GUILayout.EndHorizontal();
+        buttonManager.SetButtonIndex(buttonManager.GetButtonIndex());
 
         switch (buttonManager.GetActionIndex())
         {

@@ -16,7 +16,7 @@ public class MenuGenerator : MonoBehaviour
     #region Variables
     [Header("Background Image")]
     [SerializeField] private bool m_useBgImage = false;
-    [SerializeField, Tooltip("This one can be empty"), ConditionalField(nameof(m_useBgImage))] private BackgroundGenerator m_backgroundAspect = null;
+    [SerializeField, Tooltip("This one can be empty")/*, ConditionalField(nameof(m_useBgImage))*/] private BackgroundGenerator m_backgroundAspect = null;
     [SerializeField, Range(0, 500), Tooltip("Change this value after generating menu")] private int m_backgroundPadding = 0;
 
     [Header("Buttons")]
