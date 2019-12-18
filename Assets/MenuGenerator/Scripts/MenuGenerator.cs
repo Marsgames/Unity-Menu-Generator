@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+[RequireComponent(typeof(VerticalLayoutGroup), typeof(CanvasScaler))]
 public class MenuGenerator : MonoBehaviour
 {
     #region Variables
@@ -57,6 +58,17 @@ public class MenuGenerator : MonoBehaviour
             rect.offsetMin = new Vector2(m_backgroundPadding, m_backgroundPadding);
             rect.offsetMax = new Vector2(-m_backgroundPadding, -m_backgroundPadding);
         }
+    }
+
+    private void Start()
+    {
+        if (!m_cScaler)
+        {
+            m_cScaler = GetComponent<CanvasScaler>();
+        }
+
+        m_cScaler.matchWidthOrHeight = 1;
+        m_cScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
     }
     #endregion Unity's functions
 

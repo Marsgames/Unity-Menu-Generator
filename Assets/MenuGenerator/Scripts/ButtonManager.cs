@@ -9,51 +9,28 @@ using UnityEngine;
 public class ButtonManager : MonoBehaviour
 {
     #region Variables
-    [SerializeField] private string sceneName;
+    private string sceneName;
+    [SerializeField] private GameObject m_objectToToggle;
 
     private int m_buttonIndex;
-    private EAction m_action;
-    private int m_actionIndex;
+    private EAction m_action = (EAction)2;
+    [SerializeField] private int m_actionIndex;
     #endregion Variables
 
     ///////////////////////////////////////////////////////////
 
     #region Enums
-    public enum EAction { LoadScene, Quit };
+    public enum EAction { LoadScene, ToggleObject, Quit };
     #endregion Enums
 
     ///////////////////////////////////////////////////////////
 
     #region Unity's functions
-    // Start is called before the first frame update
-    private void Start()
-    {
-        CheckIfOk();
-
-        m_action = EAction.Quit;
-    }
     #endregion Unity's functions
 
     ///////////////////////////////////////////////////////////
 
     #region Functions
-    /// <summary>
-    /// Checks if all variables are set correctly, otherwise close Editor
-    /// </summary>
-    private void CheckIfOk()
-    {
-#if UNITY_EDITOR
-        bool isOk = true;
-
-        //if (!m_randomVariable)
-        //{
-        //    Debug.LogError("<b>Random Variable</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
-        //    isOk = false;
-        //}
-
-        UnityEditor.EditorApplication.isPlaying = isOk;
-#endif
-    }
     #endregion Functions
 
     ///////////////////////////////////////////////////////////
@@ -77,6 +54,22 @@ public class ButtonManager : MonoBehaviour
         sceneName = name;
     }
 
+    public GameObject GetObjectToToggle()
+    {
+        return m_objectToToggle;
+    }
+    public void SetObjectToToggle(GameObject objectToToggle)
+    {
+        if (!objectToToggle)
+        {
+            return;
+        }
+
+        m_objectToToggle = objectToToggle;
+
+        Debug.Log("ObjectToToggle : " + objectToToggle.name);
+    }
+
     public EAction GetAction()
     {
         return m_action;
@@ -93,6 +86,8 @@ public class ButtonManager : MonoBehaviour
     public void SetActionIndex(int i)
     {
         m_actionIndex = i;
+
+        Debug.Log("Mon nouvel action index est : " + i);
     }
     #endregion Accessors
 }
