@@ -1,3 +1,8 @@
+```diff
++ This package is based on original leomani3/Unity-Menu-Generator.
++ Source : https://github.com/leomani3/Unity-Menu-Generator
+```
+
 - First : Drop the prefab **CanvasMenuGenerator** into your scene
 - Second : Create a ButtonAspect - Right click in your project folder - Create - MenuGenerator - ButtonAspect
 - Third : Drop your new ButtonAspect into the CanvasMenuGenerator's **Button Aspect**
