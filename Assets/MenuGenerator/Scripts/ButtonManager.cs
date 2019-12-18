@@ -1,82 +1,87 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#region Author
+/////////////////////////////////////////
+//   Author : leomani3
+//   Source : https://github.com/leomani3/Unity-Menu-Generator
+/////////////////////////////////////////
+#endregion
 using UnityEngine;
 
-public class ButtonManager : MonoBehaviour
-{
-<<<<<<< Updated upstream
-    public enum ACTIONS { LoadScene, Quit};
+public class ButtonManager : MonoBehaviour {
 
-    [HideInInspector]
-    public int buttonIndex;
-    public string sceneName;
-    private ACTIONS action;
-    [HideInInspector]
-    public int actionIndex;
-=======
-    #region Variables
-    private string sceneName;
-    private GameObject m_objectToToggle;
+        #region Variables
+        private string sceneName;
+        private GameObject m_objectToToggle;
 
-    private int m_buttonIndex;
-    private EAction m_action = (EAction)2;
-    private int m_actionIndex;
-    #endregion Variables
->>>>>>> Stashed changes
+        private int m_buttonIndex;
+        private EAction m_action = (EAction) 2;
+        private int m_actionIndex;
+        #endregion Variables
 
-    private void Start()
+        ///////////////////////////////////////////////////////////
+
+        #region Enums
+        public enum EAction { LoadScene, ToggleObject, Quit }
+        #endregion Enums
+
+        ///////////////////////////////////////////////////////////
+
+        #region Unity's functions
+        # endregion Unity 's functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Functions
+    #endregion Functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Accessors
+    public int GetButtonIndex ()
     {
-        action = ACTIONS.Quit;
+        return m_buttonIndex;
+    }
+    public void SetButtonIndex (int index)
+    {
+        m_buttonIndex = index;
     }
 
-    public int GetButtonIndex()
-    {
-        return buttonIndex;
-    }
-
-    public void SetButtonIndex(int index)
-    {
-        buttonIndex = index;
-    }
-
-    public string GetSceneName()
+    public string GetSceneName ()
     {
         return sceneName;
     }
-
-    public void SetSceneName(string str)
+    public void SetSceneName (string name)
     {
-        sceneName = str;
+        sceneName = name;
     }
 
-<<<<<<< Updated upstream
-    public ACTIONS GetAction()
-=======
+    public void SetObjectToToggle (GameObject objectToToggle)
+    {
+        if (!objectToToggle)
+        {
+            return;
+        }
+
         m_objectToToggle = objectToToggle;
+
+        Debug.Log ("ObjectToToggle : " + objectToToggle.name);
     }
 
-    public EAction GetAction()
->>>>>>> Stashed changes
+    public EAction GetAction ()
     {
-        return action;
+        return m_action;
+    }
+    public void SetAction (EAction action)
+    {
+        m_action = action;
     }
 
-    public void SetAction(ACTIONS act)
+    public int GetActionIndex ()
     {
-        action = act;
+        return m_actionIndex;
     }
-
-    public int GetActionIndex()
+    public void SetActionIndex (int i)
     {
-        return actionIndex;
-    }
-
-    public void SetActionIndex(int i)
-    {
-<<<<<<< Updated upstream
-        actionIndex = i;
-=======
         m_actionIndex = i;
->>>>>>> Stashed changes
     }
+    #endregion Accessors
 }

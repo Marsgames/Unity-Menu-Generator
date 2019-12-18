@@ -1,30 +1,21 @@
-- First : Drop the prefab __CanvasMenuGenerator__ into your scene
-- Second : Create a ButtonAspect
-	- Right click in your project folder
-	- Create
-	- MenuGenerator
-	- ButtonAspect
-- Third : Drop your new ButtonAspect into the CanvasMenuGenerator's __Button Aspect__
-- Optional : Create a BackgroundAspect
-	- Right click in your project folder
-	- Create
-	- MenuGenerator
-	- BackgroundAspect
-- Optional + : Check the __Use Bg Image__ box
-- Optional + : Select __Background Padding__ with the slider (it's easier to use this option when the menu is created)
-- Fourth : Add buttons
-	- Select __CanvasMenuGenerator__
-	- Go to script __Menu Generator__
-	- Expand __Button Names__
-	- Enter the number of buttons you want into the __Size__ field
-	- Enter names (text) of your buttons for each __Element__
-- Fifth : Enter __Button Font Size__
-- Sixth : Select __Space Between Buttons__ with the slider (it's easier to use this option when the menu is created)
-- Seventh : Click on __Generate Menu__
+- First : Drop the prefab **CanvasMenuGenerator** into your scene
+- Second : Create a ButtonAspect - Right click in your project folder - Create - MenuGenerator - ButtonAspect
+- Third : Drop your new ButtonAspect into the CanvasMenuGenerator's **Button Aspect**
+- Optional : Create a BackgroundAspect - Right click in your project folder - Create - MenuGenerator - BackgroundAspect
+- Optional + : Check the **Use Bg Image** box
+- Optional + : Select **Background Padding** with the slider (it's easier to use this option when the menu is created)
+- Fourth : Add buttons - Select **CanvasMenuGenerator** - Go to script **Menu Generator** - Expand **Button Names** - Enter the number of buttons you want into the **Size** field - Enter names (text) of your buttons for each **Element**
+- Fifth : Enter **Button Font Size**
+- Sixth : Select **Space Between Buttons** with the slider (it's easier to use this option when the menu is created)
+- Seventh : Click on **Generate Menu**
+
 ---
-- You can remove all GameObject by clicking on __Clean Menu__
+
+- You can remove all GameObject by clicking on **Clean Menu**
+
 ---
-- For each __Button__ create with the GameObject __CanvasMenuGenerator__, there is 3 options you can select in the script __*Button Manager*__.
-    - __Load Scene__ : by clicking on this button, the scene passed in parameters will be load.
-    - __Toggle Object__ : by clicking on this button, the object passed in parameters will be activated/deactivated.
-    - __Quit__ : by clicking on this button, the game will quit.
+
+- For each **Button** create with the GameObject **CanvasMenuGenerator**, there is 3 options you can select in the script **_Button Manager_**.
+  - **Load Scene** : by clicking on this button, the scene passed in parameters will be load.
+  - **Toggle Object** : by clicking on this button, the object passed in parameters will be activated/deactivated.
+  - **Quit** : by clicking on this button, the game will quit.

@@ -1,146 +1,270 @@
-﻿using System.Collections;
+﻿#region Author
+/////////////////////////////////////////
+//   Author : leomani3
+//   Source : https://github.com/leomani3/Unity-Menu-Generator
+/////////////////////////////////////////
+#endregion
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
-public class MenuGenerator : MonoBehaviour
-{
-    [Header("Prefabs :")]
-    public GameObject gameLogoPrefab;
-    public GameObject backgroundPrefab;
-    public GameObject buttonPrefab;
+[RequireComponent (typeof (VerticalLayoutGroup), typeof (CanvasScaler))]
+public class MenuGenerator : MonoBehaviour {
+        #region Variables
+        [Header ("Background Image")]
+        [SerializeField] private bool m_useBgImage = false;
+        [SerializeField, Tooltip ("This one can be empty") /*, ConditionalField(nameof(m_useBgImage))*/ ] private BackgroundGenerator m_backgroundAspect = null;
+        [SerializeField, Range (0, 500), Tooltip ("Change this value after generating menu")] private int m_backgroundPadding = 0;
 
-    [Header("Réglages :")]
-    public string[] buttonNames;
-    [Header("")]
-    public float gameLogoMarginTop;
-    public float gameLogoMarginRight;
-    public float gameLogoSize;
-    [Header("")]
-    public float buttonMarginBottom;
-    public float buttonMarginRight;
-    public float spaceBewteenButtons;
-    public float buttonFontSize;
+        [Header ("Buttons")]
+        [SerializeField, Tooltip ("This one can be empty")] private ButtonGenerator m_buttonAspect = null;
+        [SerializeField] private string[] m_buttonNames = null;
+        [SerializeField] private float m_buttonFontSize = 36;
+        [SerializeField, Range (-500, 500), Tooltip ("Change this value after creating buttons menu")] private int m_spaceBewteenButtons = 0;
 
-    private List<GameObject> buttons;
+        private GameObject m_buttonPrefab;
+        private GameObject m_backgroundPrefab;
 
-    public void CreateMenu()
+        private VerticalLayoutGroup m_vLayout;
+        private CanvasScaler m_cScaler;
+        private GameObject m_background;
+
+        private List<GameObject> m_buttons;
+        #endregion Variables
+
+        ///////////////////////////////////////////////////////////
+
+        #region Unity's functions
+        private void OnValidate() {
+
+            if (m_vLayout) // && transform.childCount > 0)
+            {
+                m_vLayout.spacing = m_spaceBewteenButtons;
+            } else {
+                m_vLayout = GetComponent < VerticalLayoutGroup > ();
+
+            }
+
+            if (m_background) {
+                RectTransform rect = m_background.GetComponent < RectTransform > ();
+                rect.offsetMin = new Vector2(m_backgroundPadding, m_backgroundPadding);
+                rect.offsetMax = new Vector2(-m_backgroundPadding, -m_backgroundPadding);
+            }
+        }
+
+        private void Start() {
+            if (!m_cScaler) {
+                m_cScaler = GetComponent < CanvasScaler > ();
+            }
+
+            m_cScaler.matchWidthOrHeight = 1;
+            m_cScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
+        }#
+        endregion Unity 's functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Functions
+    /// <summary>
+    /// Checks if all variables are set correctly, otherwise close Editor
+    /// </summary>
+    private void CheckIfOk ()
     {
-        buttons = new List<GameObject>();
+        //#if UNITY_EDITOR
+        //        bool isOk = true;
+        //
+        //        //if (!m_gameLogoPrefab)
+        //        //{
+        //        //    Debug.LogError("<b>Game Logo Prefab</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
+        //        //    isOk = false;
+        //        //}
+        //
+        //        UnityEditor.EditorApplication.isPlaying = isOk;
+        //#endif
+    }
+
+    public void CreateMenu ()
+    {
+        m_vLayout = GetComponent<VerticalLayoutGroup> ();
+        m_vLayout.spacing = m_spaceBewteenButtons;
+
+        m_cScaler = GetComponent<CanvasScaler> ();
+        m_cScaler.matchWidthOrHeight = 1;
+        m_cScaler.referenceResolution = new Vector2 (Screen.width, Screen.height);
+
+        // Generate prefabs
+        GenerateButtonPrefab ();
+        GenerateBackgroundPrefab ();
+
+        m_buttons = new List<GameObject> ();
+
         //Clear du menu
-        int nbChildren = transform.childCount;
-        for (int i = 0; i < nbChildren; i++)
+        List<Transform> childs = transform.Cast<Transform> ().ToList ();
+        foreach (Transform child in childs)
         {
-            DestroyImmediate(transform.GetChild(0).gameObject);
+            DestroyImmediate (child.gameObject);
         }
 
         //Background Image
-        Instantiate(backgroundPrefab, new Vector3(GetComponent<RectTransform>().rect.width / 2, GetComponent<RectTransform>().rect.height / 2, 0), Quaternion.identity, transform);
-
-        //Game Logo
-        GameObject gameLogo = Instantiate(gameLogoPrefab, new Vector3(0, 0, 0), Quaternion.identity, transform);
-        gameLogo.transform.position = new Vector3(GetComponent<RectTransform>().rect.width / 2 - gameLogoMarginRight, GetComponent<RectTransform>().rect.height - gameLogo.GetComponent<RectTransform>().rect.height/2 - gameLogoMarginTop, 0);
-        gameLogo.GetComponent<RectTransform>().sizeDelta = new Vector2(gameLogoSize, gameLogoSize);
+        CheckBackground ();
 
         //Boutons
-        for (int i = 0; i < buttonNames.Length; i++)
+        int index = 0;
+        foreach (string buttonName in m_buttonNames)
         {
-            GameObject button = Instantiate(buttonPrefab, new Vector3(GetComponent<RectTransform>().rect.width / 2 - buttonMarginRight, GetComponent<RectTransform>().rect.height / 2, 0), Quaternion.identity, transform);
-            SetButtonText(button, buttonNames[i]);
-            button.transform.position += new Vector3(0, buttonMarginBottom - (i * spaceBewteenButtons), 0);
-            button.GetComponent<ButtonManager>().SetButtonIndex(i);
-            buttons.Add(button);
+            GameObject button = Instantiate (m_buttonPrefab, transform);
+            SetButtonText (button, buttonName);
+            button.GetComponent<ButtonManager> ().SetButtonIndex (index++);
+            m_buttons.Add (button);
         }
 
-        NormalizeButtonSize(); 
+        NormalizeButtonSize ();
     }
 
     //change le text du bouton
-    public void SetButtonText(GameObject button, string buttonText)
+    public void SetButtonText (GameObject button, string buttonText)
     {
-<<<<<<< Updated upstream
-        Transform child;
-        for (int i = 0; i < button.transform.childCount; i++)
-=======
-        Transform child = button.transform.Find("ButtonBG");
-        TextMeshProUGUI text = button.GetComponentInChildren<TextMeshProUGUI>();
-        RectTransform rectTransform = text.GetComponent<RectTransform>();
+        Transform child = button.transform.Find ("ButtonBG");
+        TextMeshProUGUI text = button.GetComponentInChildren<TextMeshProUGUI> ();
+        RectTransform rectTransform = text.GetComponent<RectTransform> ();
         if (text)
->>>>>>> Stashed changes
         {
-            if (button.transform.GetChild(i).GetComponent<TextMeshProUGUI>() != null)
-            {
-                child = button.transform.GetChild(i);
-                TextMeshProUGUI text = child.GetComponent<TextMeshProUGUI>();
-                text.fontSize = buttonFontSize;
+            text.fontSize = m_buttonFontSize;
+            text.SetText (buttonText);
 
-                text.SetText(buttonText); //set le texte
-                child.GetComponent<RectTransform>().sizeDelta = new Vector2(buttonFontSize * buttonText.Length, buttonFontSize); //adapte la boite pour être sur qu'elle soit plus grande que le texte
-            }
-
-            if (button.transform.GetChild(i).gameObject.name.Contains("BG"))
+            if (rectTransform)
             {
-                child = button.transform.GetChild(i);
-                child.GetComponent<RectTransform>().sizeDelta = new Vector2(buttonFontSize * buttonText.Length, 2 * buttonFontSize);
+                rectTransform.sizeDelta = new Vector2 (m_buttonFontSize * buttonText.Length, m_buttonFontSize);
             }
         }
 
-<<<<<<< Updated upstream
-=======
-
-        rectTransform = button.transform.Find("ButtonBG").GetComponent<RectTransform>();
+        rectTransform = button.transform.Find ("ButtonBG").GetComponent<RectTransform> ();
         if (rectTransform)
         {
-            rectTransform.sizeDelta = new Vector2(m_buttonFontSize * buttonText.Length, 2 * m_buttonFontSize);
+            rectTransform.sizeDelta = new Vector2 (m_buttonFontSize * buttonText.Length, 2 * m_buttonFontSize);
         }
->>>>>>> Stashed changes
     }
 
     //Change la size de tous les boutons pour être de la même largeur que le plus grand bouton
-    public void NormalizeButtonSize()
+    public void NormalizeButtonSize ()
     {
-        //Normalisation de la largeur des boutons selon le plus large.
         float maxWidth = 0;
-        for (int i = 0; i < buttons.Count; i++)
+        Transform child;
+        RectTransform rectTransform;
+
+        foreach (GameObject button in m_buttons)
         {
-<<<<<<< Updated upstream
-            Transform child;
-            for (int j = 0; j < buttons[i].transform.childCount; j++)
-=======
-            child = button.transform.Find("ButtonBG");
+            child = button.transform.Find ("ButtonBG");
 
             if (child)
->>>>>>> Stashed changes
             {
-                if (buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
+                rectTransform = child.GetComponent<RectTransform> ();
+
+                if (rectTransform.sizeDelta.x > maxWidth)
                 {
-                    child = buttons[i].transform.GetChild(j);
-                    if (child.GetComponent<RectTransform>().sizeDelta.x > maxWidth)
-                    {
-                        maxWidth = child.GetComponent<RectTransform>().sizeDelta.x;
-                    }
+                    maxWidth = rectTransform.sizeDelta.x;
                 }
+
+                rectTransform.sizeDelta = new Vector2 (maxWidth, rectTransform.sizeDelta.y);
             }
         }
 
-        for (int i = 0; i < buttons.Count; i++)
+        foreach (GameObject button in m_buttons)
         {
-<<<<<<< Updated upstream
-            Transform child;
-            for (int j = 0; j < buttons[i].transform.childCount; j++)
-=======
-            child = button.transform.Find("ButtonBG");
+            child = button.transform.Find ("ButtonBG");
 
             if (child)
->>>>>>> Stashed changes
             {
-                if (buttons[i].transform.GetChild(j).gameObject.name.Contains("BG"))
+                rectTransform = child.GetComponent<RectTransform> ();
+
+                // ça évite de parcourir 2 fois la totalité des enfants
+                if (rectTransform.sizeDelta.x == maxWidth)
                 {
-                    child = buttons[i].transform.GetChild(j);
-                    child.GetComponent<RectTransform>().sizeDelta = new Vector2(maxWidth, child.GetComponent<RectTransform>().sizeDelta.y);
+                    return;
                 }
+
+                rectTransform.sizeDelta = new Vector2 (maxWidth, rectTransform.sizeDelta.y);
             }
         }
     }
 
+    private void GenerateButtonPrefab ()
+    {
+        m_buttonPrefab = Resources.Load<GameObject> ("Button");
+
+        if (m_buttonAspect)
+        {
+            Image buttonImage = m_buttonPrefab.GetComponentInChildren<Image> ();
+            buttonImage.sprite = m_buttonAspect.GetImage ();
+            buttonImage.color = m_buttonAspect.GetColor ();
+        }
+    }
+
+    private void GenerateBackgroundPrefab ()
+    {
+        m_backgroundPrefab = Resources.Load<GameObject> ("Background");
+        LayoutElement le = m_backgroundPrefab.AddComponent<LayoutElement> ();
+        le.ignoreLayout = true;
+
+        if (m_backgroundAspect)
+        {
+            Image backgroundImage = m_backgroundPrefab.GetComponentInChildren<Image> ();
+            backgroundImage.sprite = m_backgroundAspect.GetImage ();
+            backgroundImage.color = m_backgroundAspect.GetColor ();
+        }
+
+        Vector2 screeSize = new Vector2 (Screen.width, Screen.height);
+        RectTransform rect = m_backgroundPrefab.GetComponent<RectTransform> ();
+        rect.sizeDelta = screeSize;
+        rect.offsetMin = new Vector2 (m_backgroundPadding, m_backgroundPadding);
+        rect.offsetMax = new Vector2 (-m_backgroundPadding, -m_backgroundPadding);
+    }
+
+    private void CheckBackground (bool fromOnValidate = false)
+    {
+        if (m_useBgImage)
+        {
+            if (m_background)
+            {
+                return;
+            }
+
+            GenerateBackgroundPrefab ();
+            m_background = Instantiate (m_backgroundPrefab, transform);
+        }
+        else
+        {
+            if (!m_background)
+            {
+                return;
+            }
+
+            DestroyImmediate (m_background);
+        }
+    }
+    #endregion Functions
+
+    ///////////////////////////////////////////////////////////
+
+    #region Accessors
+    public bool GetUseBgImage ()
+    {
+        return m_useBgImage;
+    }
+    public void SetUseBgImage (bool value)
+    {
+        m_useBgImage = value;
+    }
+
+    public int GetBackgroundPadding ()
+    {
+        return m_backgroundPadding;
+    }
+    public void SetBackgroundPadding (int padding)
+    {
+        m_backgroundPadding = padding;
+    }
+    #endregion Accessors
 }
