@@ -32,3 +32,13 @@
   - **Load Scene** : by clicking on this button, the scene passed in parameters will be load.
   - **Toggle Object** : by clicking on this button, the object passed in parameters will be activated/deactivated.
   - **Quit** : by clicking on this button, the game will quit.
+
+---
+
+- There is 4 video to watch how it works :
+  - [First part](https://i.imgur.com/Hqt7mtQ.mp4)
+  - [Second part](https://i.imgur.com/p3UfM3R.mp4)
+  - [Third part](https://i.imgur.com/a6P9XIC.mp4)
+  - [Fourth part](https://i.imgur.com/hI3CplO.mp4)
+  
+<a id="raw-url" href="https://raw.githubusercontent.com/Marsgames/Unity-Menu-Generator/master/MenuGenerator.unitypackage">Download package</a>
