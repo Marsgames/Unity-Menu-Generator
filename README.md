@@ -7,11 +7,14 @@
 - Fourth : Add buttons - Select **CanvasMenuGenerator** - Go to script **Menu Generator** - Expand **Button Names** - Enter the number of buttons you want into the **Size** field - Enter names (text) of your buttons for each **Element**
 - Fifth : Enter **Button Font Size**
 - Sixth : Select **Space Between Buttons** with the slider (it's easier to use this option when the menu is created)
-- Seventh : Click on **Generate Menu**
+- Seventh : Add the sound you want to hear when a button is selected into **Select Sound** field in **Menu Manger** script (composent of **CanvasMenuGenerator**)  
+- Heighth : Click on **Generate Menu**
+- Optional : Import TextMesh Pro (TMP) if needed
 
 ---
 
-- You can remove all GameObject by clicking on **Clean Menu**
+- You can *update* your menu by clickinxg on *Generate Menu*
+- You can *remove* all GameObject by clicking on **Clean Menu**
 
 ---
 

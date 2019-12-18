@@ -6,27 +6,28 @@
 #endregion
 using UnityEngine;
 
-public class ButtonManager : MonoBehaviour {
+public class ButtonManager : MonoBehaviour
+{
 
-        #region Variables
-        private string sceneName;
-        private GameObject m_objectToToggle;
+    #region Variables
+    [SerializeField, HideInInspector] private string sceneName;
+    [SerializeField, HideInInspector] private GameObject m_objectToToggle;
 
-        private int m_buttonIndex;
-        private EAction m_action = (EAction) 2;
-        private int m_actionIndex;
-        #endregion Variables
+    [SerializeField, HideInInspector] private int m_buttonIndex;
+    [SerializeField, HideInInspector] private EAction m_action;
+    [SerializeField, HideInInspector] private int m_actionIndex;
+    #endregion Variables
 
-        ///////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
 
-        #region Enums
-        public enum EAction { LoadScene, ToggleObject, Quit }
-        #endregion Enums
+    #region Enums
+    public enum EAction { LoadScene, ToggleObject, Quit }
+    #endregion Enums
 
-        ///////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
 
-        #region Unity's functions
-        # endregion Unity 's functions
+    #region Unity's functions
+    #endregion Unity 's functions
 
     ///////////////////////////////////////////////////////////
 
@@ -36,25 +37,25 @@ public class ButtonManager : MonoBehaviour {
     ///////////////////////////////////////////////////////////
 
     #region Accessors
-    public int GetButtonIndex ()
+    public int GetButtonIndex()
     {
         return m_buttonIndex;
     }
-    public void SetButtonIndex (int index)
+    public void SetButtonIndex(int index)
     {
         m_buttonIndex = index;
     }
 
-    public string GetSceneName ()
+    public string GetSceneName()
     {
         return sceneName;
     }
-    public void SetSceneName (string name)
+    public void SetSceneName(string name)
     {
         sceneName = name;
     }
 
-    public void SetObjectToToggle (GameObject objectToToggle)
+    public void SetObjectToToggle(GameObject objectToToggle)
     {
         if (!objectToToggle)
         {
@@ -62,26 +63,28 @@ public class ButtonManager : MonoBehaviour {
         }
 
         m_objectToToggle = objectToToggle;
-
-        Debug.Log ("ObjectToToggle : " + objectToToggle.name);
+    }
+    public GameObject GetObjectToToggle()
+    {
+        return m_objectToToggle;
     }
 
-    public EAction GetAction ()
+    public EAction GetAction()
     {
         return m_action;
     }
-    public void SetAction (EAction action)
+    public void SetAction(EAction action)
     {
         m_action = action;
     }
 
-    public int GetActionIndex ()
-    {
-        return m_actionIndex;
-    }
-    public void SetActionIndex (int i)
-    {
-        m_actionIndex = i;
-    }
+    //public int GetActionIndex()
+    //{
+    //    return m_actionIndex;
+    //}
+    //public void SetActionIndex(int i)
+    //{
+    //    m_actionIndex = i;
+    //}
     #endregion Accessors
 }

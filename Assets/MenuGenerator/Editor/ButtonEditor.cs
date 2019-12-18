@@ -15,11 +15,11 @@ public class ButtonEditor : Editor
 
 
         ButtonManager buttonManager = (ButtonManager)target;
-        buttonManager.SetActionIndex(GUILayout.Toolbar(buttonManager.GetActionIndex(), new string[] { "Load Scene", "ToggleObject", "Quit" }));
+        buttonManager.SetAction((ButtonManager.EAction)GUILayout.Toolbar((int)buttonManager.GetAction(), new string[] { "Load Scene", "ToggleObject", "Quit" }));
 
         buttonManager.SetButtonIndex(buttonManager.GetButtonIndex());
 
-        switch (buttonManager.GetActionIndex())
+        switch ((int)buttonManager.GetAction())
         {
             case 0:
                 buttonManager.SetAction(ButtonManager.EAction.LoadScene);

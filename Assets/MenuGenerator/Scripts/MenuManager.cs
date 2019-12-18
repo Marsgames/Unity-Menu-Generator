@@ -30,8 +30,6 @@ public class MenuManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CheckIfOk();
-
         m_audioSource = GetComponent<AudioSource>();
         m_camera = Camera.main;
 
@@ -46,8 +44,6 @@ public class MenuManager : MonoBehaviour
 
         m_currentIndex = -1;
         m_maxIndex = m_buttons.Count - 1;
-
-        //m_buttons[m_currentIndex].GetComponent<Animator>().SetBool("selected", true);
     }
 
     // Update is called once per frame
@@ -67,24 +63,6 @@ public class MenuManager : MonoBehaviour
     ///////////////////////////////////////////////////////////
 
     #region Functions
-    /// <summary>
-    /// Checks if all variables are set correctly, otherwise close Editor
-    /// </summary>
-    private void CheckIfOk()
-    {
-#if UNITY_EDITOR
-        bool isOk = true;
-
-        //if (!m_randomVariable)
-        //{
-        //    Debug.LogError("<b>Random Variable</b> cannot be null in <color=#0000FF>" + name + "</color>", gameObject);
-        //    isOk = false;
-        //}
-
-        UnityEditor.EditorApplication.isPlaying = isOk;
-#endif
-    }
-
     private void MoveInMenu()
     {
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -126,14 +104,10 @@ public class MenuManager : MonoBehaviour
             switch (btn.GetAction())
             {
                 case ButtonManager.EAction.LoadScene:
-                    Debug.Log("load scene");
-
                     SceneManager.LoadScene(btn.GetSceneName());
                     break;
 
                 case ButtonManager.EAction.ToggleObject:
-                    Debug.Log("toggle object");
-
                     GameObject go = btn.GetObjectToToggle();
                     if (go)
                     {
@@ -142,8 +116,6 @@ public class MenuManager : MonoBehaviour
                     break;
 
                 case ButtonManager.EAction.Quit:
-                    Debug.Log("quit");
-
                     Application.Quit();
 
 #if UNITY_EDITOR
@@ -171,16 +143,13 @@ public class MenuManager : MonoBehaviour
                 continue;
             }
 
-            //Debug.Log("Gameobject : " + raycast.gameObject.name, raycast.gameObject);
             button = raycast.gameObject.transform.parent.GetComponent<ButtonManager>();
 
             if (button && button.GetButtonIndex() != m_currentIndex)
             {
                 m_lastAction = 1;
-                //Debug.Log("button index : " + button.GetButtonIndex());
 
                 m_currentIndex = button.GetButtonIndex();
-                //SetSelected(m_currentIndex);
                 return true;
             }
             else if (button)

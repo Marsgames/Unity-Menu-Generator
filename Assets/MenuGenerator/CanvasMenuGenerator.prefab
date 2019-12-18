@@ -115,11 +115,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09bde6c9a671e8d4c92b8930ab2338ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_buttonAspect: {fileID: 11400000, guid: 19c931c7ad7f64ae88158036dd1fd4e4, type: 2}
+  m_useBgImage: 0
   m_backgroundAspect: {fileID: 11400000, guid: 44b37f26db19c4342aeb7ac8ebc35ba3, type: 2}
+  m_backgroundPadding: 0
+  m_buttonAspect: {fileID: 11400000, guid: 19c931c7ad7f64ae88158036dd1fd4e4, type: 2}
   m_buttonNames: []
-  m_spaceBewteenButtons: 0
   m_buttonFontSize: 36
+  m_spaceBewteenButtons: 0
 --- !u!114 &7916655377812927585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 915f4fb9efa6d2c4e8388de2c8d64e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectSound: {fileID: 8300000, guid: d9ee5591fa3cf47449b9e3bd4d5a7d6a, type: 3}
+  m_selectSound: {fileID: 0}
 --- !u!82 &4115908459101498305
 AudioSource:
   m_ObjectHideFlags: 0
@@ -154,7 +156,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 50000
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
