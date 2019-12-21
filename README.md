@@ -18,7 +18,7 @@
 - Fifth : Enter **Button Font Size**
 - Sixth : Select **Space Between Buttons** with the slider (it's easier to use this option when the menu is created)
 - Seventh : Add the sound you want to hear when a button is selected into **Select Sound** field in **Menu Manger** script (composent of **CanvasMenuGenerator**)  
-- Heighth : Click on **Generate Menu**
+- Eighth : Click on **Generate Menu**
 - Optional : Import TextMesh Pro (TMP) if needed
 
 ---
