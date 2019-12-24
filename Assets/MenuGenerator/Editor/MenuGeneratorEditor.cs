@@ -13,6 +13,7 @@ public class MenuGeneratorEditor : Editor
 
         MenuGenerator menuGenerator = (MenuGenerator)target;
 
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Generate Menu"))
         {
             menuGenerator.CreateMenu();
@@ -30,6 +31,7 @@ public class MenuGeneratorEditor : Editor
                 DestroyImmediate(child.gameObject);
             }
         }
+        EditorGUILayout.EndHorizontal();
 
         //HideBGVariables();
     }

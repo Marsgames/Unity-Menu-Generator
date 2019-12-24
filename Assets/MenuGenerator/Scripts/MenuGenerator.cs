@@ -23,7 +23,7 @@ public class MenuGenerator : MonoBehaviour
     [SerializeField, Tooltip("This one can be empty")] private ButtonGenerator m_buttonAspect = null;
     [SerializeField] private string[] m_buttonNames = null;
     [SerializeField] private float m_buttonFontSize = 36;
-    [SerializeField, Range(-500, 500), Tooltip("Change this value after creating buttons menu")] private int m_spaceBewteenButtons = 0;
+    [SerializeField, Range(-15, 400), Tooltip("Change this value after creating buttons menu")] private int m_spaceBewteenButtons = 0;
 
     private GameObject m_buttonPrefab;
     private GameObject m_backgroundPrefab;
