@@ -41,7 +41,7 @@
 
 ---
 
-- There is 4 video to watch how it works :
+- There is 4 video to see how it works :
   - [First part](https://i.imgur.com/Hqt7mtQ.mp4)
   - [Second part](https://i.imgur.com/p3UfM3R.mp4)
   - [Third part](https://i.imgur.com/a6P9XIC.mp4)
